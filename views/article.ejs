@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <div class="header">
+      <h1><%= article.title %></h1>
+      <a href="<%= article.link %>">原文链接</a> | 
+      <span><%= article.date.toLocaleDateString() %></span>
+    </div>
+
+    <div><%- article.description %></div>
+  </body>
+</html>
