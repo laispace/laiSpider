@@ -19,10 +19,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-var routes = require('./routes/index');
-var article = require('./routes/article');
+// normal pages
+var routes = require('./routes');
 app.use('/', routes);
-app.use('/article', article);
+
+// restful api
+var api = require('./routes/api');
+app.use('/api', api);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

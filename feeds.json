@@ -1,7 +1,7 @@
 [{
-    "name": "百度FEX",
+    "name": "百度FEX的博客",
     "url": "http://fex.baidu.com/feed.xml"
 }, {
-    "name": "阮一峰",
+    "name": "阮一峰的博客",
     "url": "http://www.ruanyifeng.com/blog/atom.xml"
 }]

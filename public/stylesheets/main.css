@@ -1,0 +1,23 @@
+
+html {
+    font-size: 62.5%;
+}
+
+
+.list a {
+  color: #00B7FF;
+  text-decoration: none;
+
+}
+
+.list a:visited {
+    color: #eee;
+}
+
+
+.content {
+    height: 100%;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+

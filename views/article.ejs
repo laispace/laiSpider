@@ -1,16 +1,21 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <div class="header">
-      <h1><%= article.title %></h1>
-      <a href="<%= article.link %>">原文链接</a> | 
-      <span><%= article.date.toLocaleDateString() %></span>
+<% include includes/header.ejs %>
+
+
+    <div class="card">
+    <div class="item item-divider">
+        <a href="<%= article.link %>">原文链接</a> |
+        <span><%= article.date.toLocaleDateString() %></span>
+        <a href="/categories/<%= article._category._id %>"><%= article._category.name %></a>
+        <span></span>
+    </div>
+      <div class="item">
+        <%- article.description %>
+      </div>
+      <div class="item item-divider">
+        <a href="<%= article.link %>">原文链接</a> |
+        <span><%= article.date.toLocaleDateString() %></span>
+    </div>
     </div>
 
-    <div><%- article.description %></div>
-  </body>
-</html>
+
+<% include includes/footer.ejs %>

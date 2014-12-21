@@ -1,0 +1,11 @@
+<% include includes/header.ejs %>
+    <ul class="list">
+      <% for (var i = 0; i < articles.length; i++) { %>
+        <li class="item">
+        <a href="/articles/<%= articles[i]._id %>"><%= articles[i].title %></a>
+        </li>
+      <% };%>
+    </ul>
+  </body>
+</html>
+<% include includes/footer.ejs %>
