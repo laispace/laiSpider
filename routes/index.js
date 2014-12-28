@@ -2,7 +2,8 @@ var express = require('express'),
     router = express.Router(),
     mongoose = require('mongoose'),
     ArticleModel = require('../models/article'),
-    CategoryModel = require('../models/category');
+    CategoryModel = require('../models/category'),
+    saver = require('../spiders/saver');
 
 
 /* home page. */
@@ -60,6 +61,8 @@ router.get('/categories', function(req, res) {
         });
     })
 });
+
+// add a category
 router.post('/categories', function(req, res) {
         var name =  req.body.name;
         var url =  req.body.url;
@@ -71,6 +74,7 @@ router.post('/categories', function(req, res) {
             res.send(url + '已存在');
         } else {
             var newCategory = new CategoryModel({
+                _id: mongoose.Types.ObjectId(),
                 name: name,
                 url: url
             });
@@ -79,7 +83,8 @@ router.post('/categories', function(req, res) {
                     res.send(url + '添加失败，请重试。');
                 } else {
                     res.send(url + '添加成功。');
-                    // TODO start spider to scrach this feed
+                    // save articles to database
+                    saver.saveArticles(newCategory);
                 }
             });
         }

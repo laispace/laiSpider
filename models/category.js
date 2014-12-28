@@ -6,6 +6,7 @@ var CategorySchema = mongoose.Schema({
     articles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }]
 });
 
+
 var Category = mongoose.model('Category', CategorySchema);
 
 module.exports = Category;

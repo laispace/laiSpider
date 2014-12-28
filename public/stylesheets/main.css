@@ -1,9 +1,3 @@
-
-html {
-    font-size: 62.5%;
-}
-
-
 .list a {
   color: #00B7FF;
   text-decoration: none;
@@ -14,10 +8,15 @@ html {
     color: #eee;
 }
 
+/*  disable nowrap */
+.item p {
+    white-space: normal;
+}
+
 
 .content {
-    height: 100%;
+    height: 100px;
     overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
+    /*-webkit-overflow-scrolling: touch;*/
 }
 

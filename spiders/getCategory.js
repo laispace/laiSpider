@@ -2,10 +2,10 @@ var fs = require('fs'),
     FeedParser = require('feedparser'),
     request = require('request'),
     mongoose = require('mongoose'),
-    CategoryModel = require('./models/category'),
-    ArticleModel = require('./models/article');
+    CategoryModel = require('./../models/category'),
+    ArticleModel = require('./../models/article');
 
-var feeds = require('./feeds.json');
+var feeds = require('./../feeds.json');
 
 
 var db = mongoose.connect('mongodb://localhost/laiSpider');
@@ -41,10 +41,8 @@ CategoryModel.remove({}, function (error) {
                 });
             }
         });
-
-
     }
-})
+});
 
 
 
