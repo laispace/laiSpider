@@ -1,5 +1,5 @@
 var fs = require('fs'),
-    FeedParser = require('feedparser'),
+    debug = require('debug')('laiSpider'),
     request = require('request'),
     mongoose = require('mongoose'),
     CategoryModel = require('./../models/category'),
@@ -20,9 +20,8 @@ CategoryModel.remove({}, function (error) {
             if (error) {
                 console.log(error);
             } else {
-                console.log('all articles emptyed.');
-
-                // save categories to database
+                debug('all articles emptyed.');
+                debug('save categories to database');
                 var feedsLen = feeds.length;
                 var feedsCount = 0;
                 feeds.forEach(function (feed, index) {

@@ -1,11 +1,11 @@
 <% include includes/header.ejs %>
-
-    <ul class="list">
-      <% for (var i = 0; i < categories.length; i++) { %>
-        <li class="item">
-        <a href="/categories/<%= categories[i]._id %>"><%= categories[i].name %></a>
+<div class="ui-content js-active">
+    <ul class="ui-list ui-list-text ui-border-tb">
+        <% for (var i = 0; i < categories.length; i++) { %>
+        <li class="ui-border-t ui-list-item-link">
+            <a href="/categories/<%= categories[i]._id %>"><%= categories[i].name %></a>
         </li>
-      <% };%>
+        <% } %>
     </ul>
-
+</div>
 <% include includes/footer.ejs %>

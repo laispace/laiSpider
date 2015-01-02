@@ -1,5 +1,5 @@
 var fs = require('fs'),
-    FeedParser = require('feedparser'),
+    debug = require('debug')('laiSpider'),
     request = require('request'),
     mongoose = require('mongoose'),
     CategoryModel = require('./../models/category'),
@@ -11,9 +11,9 @@ var db = mongoose.connect('mongodb://localhost/laiSpider');
 
 CategoryModel.find({}, function(error, categories) {
     if (error) {
-        console.log(error);
+        debug(error);
     } else {
-        // save articles to database
+        debug('saving articles to database');
         categories.forEach(function (category) {
             saver.saveArticles(category);
         });

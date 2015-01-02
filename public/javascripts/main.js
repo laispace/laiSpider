@@ -1,18 +1,14 @@
 // init scroller
 
-//window.articlesScroll = new IScroll('.content', {click: true});
 
 // set content's height
 function setContentHeight() {
-    var headerHeight = $('.bar-header').height();
-    var footerHeight = $('.tabs').height();
+    var headerHeight = $('.ui-header').height();
+    var footerHeight = $('.ui-footer').height();
     var contentHeight = $(window).height() - headerHeight - footerHeight;
-    $('.content').height(contentHeight);
+    $('.ui-content').height(contentHeight);
 }
 setContentHeight();
-$(window).on('resize', setContentHeight);
+window.articlesScroll = new IScroll('.ui-content', {click: true});
 
-// double click title to return top
-$('.bar-header').on('tap', function () {
-    $('.content').scrollTop(0);
-})
+$(window).on('resize', setContentHeight);

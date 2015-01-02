@@ -1,70 +1,101 @@
 var fs = require('fs'),
+    debug = require('debug')('laiSpider'),
+    Q = require('q'),
+    chalk = require('chalk'),
     FeedParser = require('feedparser'),
     request = require('request'),
     mongoose = require('mongoose'),
-    CategoryModel = require('./../models/category'),
     ArticleModel = require('./../models/article');
 
+
+function saveArticleInPromise(category, article) {
+    var catDeferred = Q.defer();
+    category.articles.push(article._id);
+    category.save(function(error) {
+        if (error) {
+            debug(error);
+            catDeferred.reject(error);
+        } else {
+            ArticleModel.findOne({
+                link: article.link
+            }, function(error, oldArticle) {
+                if (error) {
+                    debug(error);
+                    catDeferred.reject(error);
+                } else if (oldArticle) {
+                    debug('article exist: ', oldArticle.title);
+                    catDeferred.resolve(oldArticle);
+                } else {
+                    var newArticle = new ArticleModel(article);
+                    newArticle.save(function(error) {
+                        if (error) {
+                            debug(error);
+                            catDeferred.reject(error);
+                        } else {
+                            debug('article added: ', article.title);
+                            catDeferred.resolve(newArticle);
+                        }
+                    });
+                }
+            });
+        }
+    });
+    return catDeferred.promise;
+}
+
+
 function saveArticles(category) {
-    var name = category.name,
-            url = category.url,
-            feedparser = new FeedParser();
+    var url = category.url,
+        feedparser = new FeedParser();
+    var articles = [],
+        promises = [];
 
     request
         .get(url)
         .on('error', function(error) {
-            console.log(error);
+            debug(error);
         })
         .on('response', function(res) {
             if (res.statusCode != 200) {
-                console.error(new Error('Bad status code'));
+                debug(new Error('Bad status code'));
             } else {
                 res.pipe(feedparser);
             }
         });
     feedparser
         .on('error', function(error) {
-            console.log(error);
+            debug(error);
         })
-        .on('data', function(item) {
-            var article = {
-                _id: new mongoose.Types.ObjectId(),
-                title: item.title,
-                link: item.link,
-                date: item.date,
-                description: item.description,
-                _category: category._id
-            };
-
-            category.articles.push(article._id);
-            category.save(function(error) {
-                if (error) {
-                    console.loge(error);
-                } else {
-                    ArticleModel.findOne({
-                        title: item.title,
-                        link: item.link
-                    }, function(error, oldArticle) {
-                        if (error) {
-                            console.error(error);
-                        } else if (oldArticle) {
-                            console.log('article exist: ', oldArticle.title);
-                        } else {
-                            var newArticle = new ArticleModel(article);
-                            newArticle.save(function(error) {
-                                if (error) {
-                                    console.error(error);
-                                } else {
-                                    console.log('article added: ', article.title);
-                                }
-                            });
-                        }
-                    });
-                }
-            });
+        .on('readable', function() {
+            var stream = this,
+                meta = this.meta,
+                item;
+            while(item = stream.read()) {
+                var article = {
+                    _id: new mongoose.Types.ObjectId(),
+                    title: item.title,
+                    link: item.link,
+                    date: item.date,
+                    description: item.description,
+                    _category: category._id
+                };
+                articles.push(article);
+            }
         })
         .on('end', function() {
-            // db.disconnect();
+            for (var i = 0; i < articles.length; i++) {
+                var article = articles[i];
+                var promise = saveArticleInPromise(category, article);
+                promises.push(promise);
+                promise.then(function (article) {
+                    debug('done saving %s', chalk.green(article.title));
+                }, function (error) {
+                    debug(error);
+                });
+            }
+            Q.allSettled(promises).then(function (results) {
+                debug('done saving %s articles: ', chalk.green(results.length));
+            });
         });
 }
 

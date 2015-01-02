@@ -1,28 +1,42 @@
 var express = require('express'),
     router = express.Router(),
+    debug = require('debug')('laiSpider'),
     mongoose = require('mongoose'),
     ArticleModel = require('../models/article'),
     CategoryModel = require('../models/category'),
     saver = require('../spiders/saver');
 
+function handleError(error) {
+    res.status(500)
+        .render('error', {
+            message: 'ops, something wrong :(',
+            error: error
+        });
+}
 
 /* home page. */
 router.get('/', function(req, res) {
     ArticleModel.find({}, function(error, articles) {
         if (error) {
-            console.log(error);
+            res.status(500)
+                .render('error', {
+                    message: 'ops, something wrong :(',
+                    error: error
+                });
         }
+
         res.render('articles', {
             title: 'articles',
             articles: articles
         });
     })
 });
+
 // article page
 router.get('/articles', function(req, res) {
     ArticleModel.find({}, function(error, articles) {
         if (error) {
-            console.log(error);
+            handleError(error);
         }
         res.render('articles', {
             title: 'articles',
@@ -34,7 +48,7 @@ router.get('/articles/:id', function(req, res) {
     var id = req.params.id;
     ArticleModel.findById(id, function(error, article) {
         if (error) {
-            throw error;
+            handleError(error);
         }
         ArticleModel.findById(id).populate('_category').exec(function (error, article) {
             console.log(article);
@@ -53,7 +67,7 @@ router.get('/articles/:id', function(req, res) {
 router.get('/categories', function(req, res) {
     CategoryModel.find({}, function(error, categories) {
         if (error) {
-            throw error;
+            handleError(error);
         }
         res.render('categories', {
             title: 'category',
@@ -61,7 +75,6 @@ router.get('/categories', function(req, res) {
         });
     })
 });
-
 // add a category
 router.post('/categories', function(req, res) {
         var name =  req.body.name;
@@ -69,7 +82,7 @@ router.post('/categories', function(req, res) {
 
     CategoryModel.findOne({url: url}, function(error, category) {
         if (error) {
-            throw error;
+            handleError(error);
         } else if (category) {
             res.send(url + '已存在');
         } else {
@@ -90,11 +103,12 @@ router.post('/categories', function(req, res) {
         }
     })
 });
+// category page
 router.get('/categories/:id', function(req, res) {
     var id = req.params.id;
     CategoryModel.findById(id, function(error, category) {
         if (error) {
-            console.log(error);
+            handleError(error);
         } else {
             CategoryModel.findById(id).populate('articles').exec(function (error, category) {
                 if (error) {
@@ -112,12 +126,11 @@ router.get('/categories/:id', function(req, res) {
     })
 });
 
-
-// add category
+// add category page
 router.get('/add', function(req, res) {
-        res.render('add', {
-            title: 'add category'
-        });
+    res.render('add', {
+        title: 'add category'
+    });
 });
 
 

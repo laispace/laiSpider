@@ -1,18 +1,21 @@
 <% include includes/header.ejs %>
+<div class="ui-content js-active">
+    <form action="/categories" method="post">
+        <div class="ui-form-item ui-form-item-pure ui-border-b">
+            <input type="text" name="name" placeholder="feed's name">
+            <a href="#" class="ui-icon-close"></a>
+        </div>
+        <div class="ui-form-item ui-form-item-pure ui-border-b">
+            <input type="text" name="url" placeholder="feed's url">
+            <a href="#" class="ui-icon-close"></a>
+        </div>
+        <button class="ui-btn-lg ui-btn-primary">添加</button>
+
+    </form>
+</div>
 
 
 
-   <form action="/categories" method="post">
-     <div class="list">
-       <label class="item item-input">
-         <input type="text" name="name" placeholder="feed's name">
-       </label>
-       <label class="item item-input">
-         <input type="text" name="url" placeholder="feed's url">
-       </label>
-      <button class="button button-block button-positive">添加</button>
-     </div>
-   </form>
 
 
 <% include includes/footer.ejs %>

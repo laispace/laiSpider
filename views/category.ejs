@@ -1,11 +1,11 @@
 <% include includes/header.ejs %>
+<div class="ui-content js-active">
     <ul class="list">
-      <% for (var i = 0; i < articles.length; i++) { %>
+        <% for (var i = 0; i < articles.length; i++) { %>
         <li class="item">
-        <a href="/articles/<%= articles[i]._id %>"><%= articles[i].title %></a>
+            <a href="/articles/<%= articles[i]._id %>"><%= articles[i].title %></a>
         </li>
-      <% };%>
+        <% };%>
     </ul>
-  </body>
-</html>
+</div>
 <% include includes/footer.ejs %>

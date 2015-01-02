@@ -1,9 +1,13 @@
 <% include includes/header.ejs %>
-			<ul class="list">
-				<% for (var i = 0; i < articles.length; i++) { %>
-				<li class="item">
-					<%= i+'.' %> <a href="/articles/<%= articles[i]._id %>"><%= articles[i].title %></a>
-				</li>
-				<% };%>
-			</ul>
+
+<div class="ui-content js-active">
+	<ul class="ui-list ui-list-text ui-border-tb">
+		<% for (var i = 0; i < articles.length; i++) { %>
+		<li class="ui-border-t ui-list-item-link">
+			<a href="/articles/<%= articles[i]._id %>"><%= articles[i].title %></a>
+		</li>
+		<% };%>
+	</ul>
+</div>
+
 <% include includes/footer.ejs %>
